@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hxy.mybatis.mapper.UserMapper">
+    <!-- 这里namespace必须是Usermapper接口的路径，不然要运行的时候要报错 “is not known to the MapperRegistry”-->
+
+    <!-- 这里的id必须和PostsMapper接口中的接口方法名相同，不然运行的时候也要报错 -->
+    <select id="getUserById" resultType="User" parameterType="int" resultMap="resultList">
+        select * from _user where _id=#{_id}
+    </select>
+    <select id="getUserByName" resultType="java.util.List" parameterType="String" resultMap="resultList">
+        select * from _user where _name=#{name}
+    </select>
+    
+    <insert id="insertUser" parameterType="User">
+        insert into _user(_name,_age) values (#{userName},#{userAge})
+    </insert>
+
+    <delete id="deleteUser" parameterType="User">
+        delete from _user where _name= #{userName}
+    </delete>
+
+    <update id="updateUser" parameterType="User">
+        update _user set _name = #{userName}
+    </update>
+
+    <select id="selectIf" parameterType="User" resultType="User" resultMap="resultList">
+        select * from _user where 1=1
+        <if test="userName != null">
+            and _name = #{userName}
+        </if>
+        <if test="userAge != 0">
+            and _age = #{userAge}
+        </if>
+        limit 0,1
+    </select>
+    <resultMap id="resultList" type="User">
+        <id column="_id" property="id"/>
+        <result column="_name" property="userName"/>
+        <result column="_age" property="userAge"/>
+        <result column="_address" property="userAddress"/>
+    </resultMap>
+</mapper>
