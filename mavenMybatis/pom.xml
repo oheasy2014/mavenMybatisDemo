@@ -8,9 +8,6 @@
     <artifactId>mavenMybatis</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
-    <modules>
-        <module>../testwebmagic</module>
-    </modules>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
