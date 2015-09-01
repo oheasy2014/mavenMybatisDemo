@@ -35,6 +35,83 @@
         </if>
         limit 0,1
     </select>
+    <select id="selectChoose" parameterType="User" resultType="User" resultMap="resultList">
+        select * from _user where 1=1
+        <choose>
+            <when test="userName!=null">
+                and _name = #{userName}
+            </when>
+            <when test="userAddress != null">
+                and _address = #{userAddress}
+            </when>
+            <when test="userAge!=0">
+                and _age = #{userAge}
+            </when>
+        </choose>
+        limit 0,1
+    </select>
+    <select id="selectWhere" parameterType="User" resultType="User" resultMap="resultList">
+        select * from _user
+        <where>
+            <if test="userName != null">
+                and _name = #{userName}
+            </if>
+            <if test="userAge != 0">
+                and _age = #{userAge}
+            </if>
+            <if test="userAddress!=null">
+                and _address = #{userAddress}
+            </if>
+
+        </where>
+        limit 0,1
+    </select>
+    <select id="selectTrim" resultType="User" resultMap="resultList" parameterType="User">
+        select * from _user
+        <trim prefix="where" prefixOverrides="and | or" suffix=" and 1=1 ">
+            <if test="userName!=null">
+                and _name = #{userName}
+            </if>
+            <if test="userAge != 0">
+                and _age = #{userAge}
+            </if>
+            <if test="userAddress != null">
+                and _address = #{userAddress}
+            </if>
+        </trim>
+        limit 0,1
+    </select>
+    <update id="updateSet" parameterType="User">
+        update _user
+        <set>
+            <if test="userAge != 0">
+                _age = #{userAge},
+            </if>
+            <if test="userAddress != null">
+                _address = #{userAddress},
+            </if>
+        </set>
+        where _name = #{userName}
+    </update>
+
+    <update id="updateList" parameterType="java.util.List">
+        update _user set _age = 1, _address = "kk" where _name in
+        <foreach collection="list" item="user" index="index" open="(" separator="," close=")">
+            #{user.userName}
+        </foreach>
+    </update>
+    <update id="updateArray" parameterType="int[]">
+        update _user set _age =2, _address = "pp" where _id in
+        <foreach collection="array" item="ids" index="index" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </update>
+    <update id="updateMap" parameterType="java.util.Map">
+        update _user set _age = 3 where _id in
+        <foreach collection="ids" item="id" index="index" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
     <resultMap id="resultList" type="User">
         <id column="_id" property="id"/>
         <result column="_name" property="userName"/>
